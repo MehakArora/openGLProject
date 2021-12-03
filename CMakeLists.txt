@@ -2,7 +2,18 @@ cmake_minimum_required(VERSION 3.20)
 project(openGLProject)
 
 set(CMAKE_CXX_STANDARD 14)
-add_executable(openGLProject main1.cpp main.cpp common/shader.cpp common/shader.hpp)
+add_executable(openGLProject main1.cpp main.cpp
+        common/shader.cpp
+        common/shader.hpp
+        common/controls.cpp
+        common/controls.hpp
+        common/texture.cpp
+        common/texture.hpp
+        common/objloader.cpp
+        common/objloader.hpp
+        common/vboindexer.cpp
+        common/vboindexer.hpp
+        )
 add_definitions(-DGLEW_STATIC)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)

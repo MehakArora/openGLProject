@@ -86,10 +86,34 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/controls.cpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/controls.hpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/objloader.cpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/objloader.hpp">
+			<Option target="openGLProject"/>
+		</Unit>
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/shader.cpp">
 			<Option target="openGLProject"/>
 		</Unit>
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/shader.hpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/texture.cpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/texture.hpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/vboindexer.cpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/vboindexer.hpp">
 			<Option target="openGLProject"/>
 		</Unit>
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/main.cpp">

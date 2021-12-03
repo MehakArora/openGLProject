@@ -128,6 +128,54 @@ openGLProject/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/build
 .PHONY : openGLProject/fast
 
+common/controls.obj: common/controls.cpp.obj
+.PHONY : common/controls.obj
+
+# target to build an object file
+common/controls.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/controls.cpp.obj
+.PHONY : common/controls.cpp.obj
+
+common/controls.i: common/controls.cpp.i
+.PHONY : common/controls.i
+
+# target to preprocess a source file
+common/controls.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/controls.cpp.i
+.PHONY : common/controls.cpp.i
+
+common/controls.s: common/controls.cpp.s
+.PHONY : common/controls.s
+
+# target to generate assembly for a file
+common/controls.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/controls.cpp.s
+.PHONY : common/controls.cpp.s
+
+common/objloader.obj: common/objloader.cpp.obj
+.PHONY : common/objloader.obj
+
+# target to build an object file
+common/objloader.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/objloader.cpp.obj
+.PHONY : common/objloader.cpp.obj
+
+common/objloader.i: common/objloader.cpp.i
+.PHONY : common/objloader.i
+
+# target to preprocess a source file
+common/objloader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/objloader.cpp.i
+.PHONY : common/objloader.cpp.i
+
+common/objloader.s: common/objloader.cpp.s
+.PHONY : common/objloader.s
+
+# target to generate assembly for a file
+common/objloader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/objloader.cpp.s
+.PHONY : common/objloader.cpp.s
+
 common/shader.obj: common/shader.cpp.obj
 .PHONY : common/shader.obj
 
@@ -151,6 +199,54 @@ common/shader.s: common/shader.cpp.s
 common/shader.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/shader.cpp.s
 .PHONY : common/shader.cpp.s
+
+common/texture.obj: common/texture.cpp.obj
+.PHONY : common/texture.obj
+
+# target to build an object file
+common/texture.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/texture.cpp.obj
+.PHONY : common/texture.cpp.obj
+
+common/texture.i: common/texture.cpp.i
+.PHONY : common/texture.i
+
+# target to preprocess a source file
+common/texture.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/texture.cpp.i
+.PHONY : common/texture.cpp.i
+
+common/texture.s: common/texture.cpp.s
+.PHONY : common/texture.s
+
+# target to generate assembly for a file
+common/texture.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/texture.cpp.s
+.PHONY : common/texture.cpp.s
+
+common/vboindexer.obj: common/vboindexer.cpp.obj
+.PHONY : common/vboindexer.obj
+
+# target to build an object file
+common/vboindexer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj
+.PHONY : common/vboindexer.cpp.obj
+
+common/vboindexer.i: common/vboindexer.cpp.i
+.PHONY : common/vboindexer.i
+
+# target to preprocess a source file
+common/vboindexer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/vboindexer.cpp.i
+.PHONY : common/vboindexer.cpp.i
+
+common/vboindexer.s: common/vboindexer.cpp.s
+.PHONY : common/vboindexer.s
+
+# target to generate assembly for a file
+common/vboindexer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/vboindexer.cpp.s
+.PHONY : common/vboindexer.cpp.s
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -209,9 +305,21 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... openGLProject
+	@echo ... common/controls.obj
+	@echo ... common/controls.i
+	@echo ... common/controls.s
+	@echo ... common/objloader.obj
+	@echo ... common/objloader.i
+	@echo ... common/objloader.s
 	@echo ... common/shader.obj
 	@echo ... common/shader.i
 	@echo ... common/shader.s
+	@echo ... common/texture.obj
+	@echo ... common/texture.i
+	@echo ... common/texture.s
+	@echo ... common/vboindexer.obj
+	@echo ... common/vboindexer.i
+	@echo ... common/vboindexer.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

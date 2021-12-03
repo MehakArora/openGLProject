@@ -1,5 +1,9 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/openGLProject.dir/common/controls.cpp.obj"
+  "CMakeFiles/openGLProject.dir/common/objloader.cpp.obj"
   "CMakeFiles/openGLProject.dir/common/shader.cpp.obj"
+  "CMakeFiles/openGLProject.dir/common/texture.cpp.obj"
+  "CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj"
   "CMakeFiles/openGLProject.dir/main.cpp.obj"
   "CMakeFiles/openGLProject.dir/main1.cpp.obj"
   "libopenGLProject.dll.a"

@@ -1134,12 +1134,22 @@ GL/gl.h
 GL/glu.h
 -
 
+../include/common/controls.hpp
+
+../include/common/objloader.hpp
+
 ../include/common/shader.hpp
+
+../include/common/texture.hpp
+
+../include/common/vboindexer.hpp
 
 C:/Users/mehak/CLionProjects/openGLProject/main.cpp
 stdio.h
 -
 stdlib.h
+-
+vector
 -
 GL/glew.h
 -
@@ -1150,5 +1160,13 @@ glm/glm.hpp
 glm/gtc/matrix_transform.hpp
 -
 common/shader.hpp
+-
+common/texture.hpp
+-
+common/controls.hpp
+-
+common/objloader.hpp
+-
+common/vboindexer.hpp
 -
 
