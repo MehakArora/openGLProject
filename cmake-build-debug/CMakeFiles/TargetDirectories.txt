@@ -1,0 +1,3 @@
+C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir
+C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir
