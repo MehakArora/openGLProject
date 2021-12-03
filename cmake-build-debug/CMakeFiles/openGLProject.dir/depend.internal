@@ -62,6 +62,8 @@ CMakeFiles/openGLProject.dir/main.cpp.obj
  ../glm/glm/detail/type_vec4.inl
  ../glm/glm/detail/type_vec4_simd.inl
  ../glm/glm/exponential.hpp
+ ../glm/glm/ext/matrix_clip_space.hpp
+ ../glm/glm/ext/matrix_clip_space.inl
  ../glm/glm/ext/matrix_double2x2.hpp
  ../glm/glm/ext/matrix_double2x2_precision.hpp
  ../glm/glm/ext/matrix_double2x3.hpp
@@ -98,6 +100,11 @@ CMakeFiles/openGLProject.dir/main.cpp.obj
  ../glm/glm/ext/matrix_float4x3_precision.hpp
  ../glm/glm/ext/matrix_float4x4.hpp
  ../glm/glm/ext/matrix_float4x4_precision.hpp
+ ../glm/glm/ext/matrix_projection.hpp
+ ../glm/glm/ext/matrix_projection.inl
+ ../glm/glm/ext/matrix_transform.hpp
+ ../glm/glm/ext/scalar_constants.hpp
+ ../glm/glm/ext/scalar_constants.inl
  ../glm/glm/ext/scalar_int_sized.hpp
  ../glm/glm/ext/scalar_uint_sized.hpp
  ../glm/glm/ext/vector_bool2.hpp
@@ -133,6 +140,10 @@ CMakeFiles/openGLProject.dir/main.cpp.obj
  ../glm/glm/fwd.hpp
  ../glm/glm/geometric.hpp
  ../glm/glm/glm.hpp
+ ../glm/glm/gtc/constants.hpp
+ ../glm/glm/gtc/constants.inl
+ ../glm/glm/gtc/matrix_transform.hpp
+ ../glm/glm/gtc/matrix_transform.inl
  ../glm/glm/integer.hpp
  ../glm/glm/mat2x2.hpp
  ../glm/glm/mat2x3.hpp
