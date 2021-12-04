@@ -7,6 +7,8 @@
 
 
 void drawSphere(glm::vec3 pos,
+                const glm::mat4 &ViewMatrixf,
+                const glm::mat4 &ProjectionMatrixf,
                 const GLuint &programID,
                 const GLuint &LightID,
                 const GLuint &ViewMatrixID,
@@ -19,6 +21,8 @@ void drawSphere(glm::vec3 pos,
                 std::vector<unsigned short> indices);
 
 void renderASuzie(glm::vec3 pos,
+                  const glm::mat4 &ViewMatrixf,
+                  const glm::mat4 &ProjectionMatrixf,
                   const GLuint &programID,
                   const GLuint &LightID,
                   const GLuint &ViewMatrixID,
@@ -33,7 +37,9 @@ void renderASuzie(glm::vec3 pos,
                   std::vector<unsigned short> indices);
 
 
-void renderFootballField( const GLuint &programID,
+void renderFootballField( const glm::mat4 &ViewMatrixf,
+                          const glm::mat4 &ProjectionMatrixf,
+                          const GLuint &programID,
                           const GLuint &LightID,
                           const GLuint &ViewMatrixID,
                           const GLuint &MatrixID,

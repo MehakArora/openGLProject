@@ -13,15 +13,16 @@
 
 #include "renderscene.h"
 
-glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(90.0f), 5.0f / 3.0f, 0.1f, 100.0f);
-// Camera matrix
-glm::mat4 ViewMatrixf       = glm::lookAt(
-        glm::vec3(0,60,55), // Camera is at (4,3,3), in World Space
-        glm::vec3(0,0,0), // and looks at the origin
-        glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-);
 
-void renderFootballField(const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID, const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+
+void renderFootballField(const glm::mat4 &ViewMatrixf,
+                         const glm::mat4 &ProjectionMatrixf,
+                         const GLuint &programID, const GLuint &LightID,
+                         const GLuint &ViewMatrixID, const GLuint &MatrixID,
+                         const GLuint &ModelMatrixID, const GLuint &Texture,
+                         const GLuint &TextureID, const GLuint &vertexbuffer,
+                         const GLuint &normalbuffer, const GLuint &uvbuffer,
+                         const GLuint &elementbuffer, std::vector<unsigned short> indices)
 {
     // Use our shader
     glUseProgram(programID);
@@ -106,7 +107,11 @@ void renderFootballField(const GLuint &programID, const GLuint &LightID, const G
 
 }
 
-void renderASuzie(glm::vec3 pos, const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID, const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+void renderASuzie(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &ProjectionMatrixf,
+                  const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID,
+                  const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,
+                  const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer,
+                  const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
 {
 
     // Use our shader
@@ -192,7 +197,10 @@ void renderASuzie(glm::vec3 pos, const GLuint &programID, const GLuint &LightID,
 
 }
 
-void drawSphere(glm::vec3 pos, const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID, const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &vertexbuffer, const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+void drawSphere(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &ProjectionMatrixf,
+                const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID,
+                const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &vertexbuffer,
+                const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
 {
 
     // Use our shader

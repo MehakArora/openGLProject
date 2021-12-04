@@ -22,6 +22,13 @@ using namespace glm;
 #include <common/vboindexer.hpp>
 #include "common/renderscene.h"
 
+glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(90.0f), 5.0f / 3.0f, 0.1f, 100.0f);
+// Camera matrix
+glm::mat4 ViewMatrixf       = glm::lookAt(
+        glm::vec3(0,60,55), // Camera is at (4,3,3), in World Space
+        glm::vec3(0,0,0), // and looks at the origin
+        glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
+);
 
 int main( void )
 {
@@ -243,24 +250,41 @@ int main( void )
         //glm::mat4 ProjectionMatrix = getProjectionMatrix();
         //glm::mat4 ViewMatrix = getViewMatrix();
 
-        renderFootballField(programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, Texture, TextureID, vertexbuffer, normalbuffer, uvbuffer, elementbuffer, indices);
-        drawSphere(posSphere, programIDSphere, LightID, ViewMatrixIDSphere, MatrixIDSphere, ModelMatrixIDSphere, vertexbufferSphere, normalbufferSphere, uvbufferSphere, elementbufferSphere, indicesSphere);
+        renderFootballField(ViewMatrixf, ProjectionMatrixf,
+                            programID, LightID, ViewMatrixID,
+                            MatrixID, ModelMatrixID, Texture, TextureID,
+                            vertexbuffer, normalbuffer, uvbuffer, elementbuffer, indices);
+
+        drawSphere(posSphere, ViewMatrixf, ProjectionMatrixf,
+                   programIDSphere, LightID, ViewMatrixIDSphere,
+                   MatrixIDSphere, ModelMatrixIDSphere,
+                   vertexbufferSphere, normalbufferSphere, uvbufferSphere, elementbufferSphere, indicesSphere);
+
         for (int i =0 ; i<15; i++)
         {
             if(i < 5)
             {
                 glm::vec3 posSuzie = glm::vec3(39.0f - i*20.0f, 20.0f, 0.0f);
-                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
+                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
+                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
+                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
             }
             else if( i < 10)
             {
                 glm::vec3 posSuzie = glm::vec3(39.0f - (i-5)*20.0f, -20.0f, 0.0f);
-                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
+                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
+                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
+                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
             }
             else
             {
                 glm::vec3 posSuzie = glm::vec3(39.0f - (i-10)*20.0f, 0.0f, 0.0f);
-                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
+                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
+                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
+                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
             }
 
         }
