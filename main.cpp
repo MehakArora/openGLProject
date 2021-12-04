@@ -30,6 +30,10 @@ glm::mat4 ViewMatrixf       = glm::lookAt(
         glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 );
 
+
+
+
+
 int main( void )
 {
     // Initialise GLFW
@@ -229,7 +233,31 @@ int main( void )
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
+    bool startFlying = false;
 
+    std::vector<glm::vec3> suziePos;
+
+    //Initialize Suzie Positions
+    glm::vec3 posSuzie;
+    for (int i =0 ; i<15; i++)
+    {
+        if(i < 5)
+        {
+            posSuzie = glm::vec3(39.0f - i*20.0f, 20.0f, 0.0f);
+            suziePos.push_back(posSuzie);
+        }
+        else if( i < 10)
+        {
+            posSuzie = glm::vec3(39.0f - (i-5)*20.0f, -20.0f, 0.0f);
+            suziePos.push_back(posSuzie);
+
+        }
+        else
+        {
+            posSuzie = glm::vec3(39.0f - (i-10)*20.0f, 0.0f, 0.0f);
+            suziePos.push_back(posSuzie);
+        }
+    }
 
     do{
 
@@ -239,6 +267,7 @@ int main( void )
 
         if(currentTime - lastTime >= 5){
             printf("Start Flying");
+            startFlying = true;
         }
 
         // Clear the screen
@@ -260,11 +289,19 @@ int main( void )
                    MatrixIDSphere, ModelMatrixIDSphere,
                    vertexbufferSphere, normalbufferSphere, uvbufferSphere, elementbufferSphere, indicesSphere);
 
+        //Draw Suzies
         for (int i =0 ; i<15; i++)
         {
             if(i < 5)
             {
-                glm::vec3 posSuzie = glm::vec3(39.0f - i*20.0f, 20.0f, 0.0f);
+                if(startFlying)
+                {
+                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
+                }
+                else
+                {
+                    posSuzie = suziePos[i];
+                }
                 renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
                              programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
                              textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
@@ -272,7 +309,14 @@ int main( void )
             }
             else if( i < 10)
             {
-                glm::vec3 posSuzie = glm::vec3(39.0f - (i-5)*20.0f, -20.0f, 0.0f);
+                if(startFlying)
+                {
+                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
+                }
+                else
+                {
+                    posSuzie = suziePos[i];
+                }
                 renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
                              programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
                              textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
@@ -280,7 +324,14 @@ int main( void )
             }
             else
             {
-                glm::vec3 posSuzie = glm::vec3(39.0f - (i-10)*20.0f, 0.0f, 0.0f);
+                if(startFlying)
+                {
+                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
+                }
+                else
+                {
+                    posSuzie = suziePos[i];
+                }
                 renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
                              programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
                              textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,

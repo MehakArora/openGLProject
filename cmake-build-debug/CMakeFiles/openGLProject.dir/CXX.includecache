@@ -1146,24 +1146,6 @@ GL/glu.h
 
 ../include/common/vboindexer.hpp
 
-C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.cpp
-stdio.h
--
-stdlib.h
--
-vector
--
-GL/glew.h
--
-glm/glm.hpp
--
-glm/gtc/matrix_transform.hpp
--
-renderscene.h
-C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.h
-
-C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.h
-
 C:/Users/mehak/CLionProjects/openGLProject/main.cpp
 stdio.h
 -
