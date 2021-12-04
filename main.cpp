@@ -22,10 +22,10 @@ using namespace glm;
 #include <common/vboindexer.hpp>
 
 //Set Projection and Camera
-glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(70.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(90.0f), 5.0f / 3.0f, 0.1f, 100.0f);
 // Camera matrix
 glm::mat4 ViewMatrixf       = glm::lookAt(
-        glm::vec3(0,0,30), // Camera is at (4,3,3), in World Space
+        glm::vec3(0,60,55), // Camera is at (4,3,3), in World Space
         glm::vec3(0,0,0), // and looks at the origin
         glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 );
@@ -42,13 +42,13 @@ void renderFootballField(const GLuint &programID, const GLuint &LightID, const G
                        &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
 
     glm::mat4 ModelMatrix1 = glm::mat4(1.0);
-    glm::vec3 myScale(0.1f, 0.1f, 0.1f);
+    glm::vec3 myScale(0.3f, 0.3f, 0.3f);
     glm::mat4 myScalingMatrix = glm::scale(glm::mat4(1.0), myScale);
 
-    glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
-    glm::mat4 myRotationMatrix = glm::rotate(myScalingMatrix, 45.0f, myRotationAxis);
+    //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
+    //glm::mat4 myRotationMatrix = glm::rotate(myScalingMatrix, 45.0f, myRotationAxis);
 
-    glm::mat4 MVP1 = ProjectionMatrixf * ViewMatrixf * myRotationMatrix;
+    glm::mat4 MVP1 = ProjectionMatrixf * ViewMatrixf * myScalingMatrix;
 
     // Send our transformation to the currently bound shader,
     // in the "MVP" uniform
@@ -101,6 +101,7 @@ void renderFootballField(const GLuint &programID, const GLuint &LightID, const G
     // Index buffer
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
+    glMaterialf(GL_FRONT_AND_BACK, GL_COLOR_INDEXES, (0, 255, 0));
     // Draw the triangles !
     glDrawElements(
             GL_TRIANGLES,      // mode
@@ -110,7 +111,167 @@ void renderFootballField(const GLuint &programID, const GLuint &LightID, const G
     );
 }
 
+void renderASuzie(glm::vec3 pos, const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID, const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+{
 
+    // Use our shader
+    glUseProgram(programID);
+
+    glm::vec3 lightPos = glm::vec3(0, 0, 31);
+    glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+    glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE,
+                       &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
+
+    glm::mat4 ModelMatrix1 = glm::mat4(1.0);
+    glm::mat4 myTranslationMatrix = glm::translate(ModelMatrix1, pos);
+    glm::vec3 myScale(2.0f, 2.0f, 2.0f);
+    glm::mat4 myScalingMatrix = glm::scale(myTranslationMatrix, myScale);
+
+    //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
+    //glm::mat4 myRotationMatrix = glm::rotate(myScalingMatrix, 45.0f, myRotationAxis);
+    glm::mat4 MVP1 = ProjectionMatrixf * ViewMatrixf * myScalingMatrix;
+
+    // Send our transformation to the currently bound shader,
+    // in the "MVP" uniform
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP1[0][0]);
+    glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix1[0][0]);
+
+
+    // Bind our texture in Texture Unit 0
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+    // Set our "myTextureSampler" sampler to use Texture Unit 0
+    glUniform1i(TextureID, 0);
+
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+            0,                  // attribute
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void *) 0            // array buffer offset
+    );
+
+    // 2nd attribute buffer : UVs
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glVertexAttribPointer(
+            1,                                // attribute
+            2,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void *) 0                          // array buffer offset
+    );
+
+    // 3rd attribute buffer : normals
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glVertexAttribPointer(
+            2,                                // attribute
+            3,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void *) 0                          // array buffer offset
+    );
+
+    // Index buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+
+    // Draw the triangles !
+    glDrawElements(
+            GL_TRIANGLES,      // mode
+            indices.size(),    // count
+            GL_UNSIGNED_SHORT,   // type
+            (void *) 0           // element array buffer offset
+    );
+}
+
+void drawSphere(glm::vec3 pos, const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID, const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &vertexbuffer, const GLuint &normalbuffer, const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+{
+
+    // Use our shader
+    glUseProgram(programID);
+
+    glm::vec3 lightPos = glm::vec3(0, 0, 31);
+    glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+    glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE,
+                       &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
+
+    glm::mat4 ModelMatrix1 = glm::mat4(1.0);
+    glm::mat4 myTranslationMatrix = glm::translate(ModelMatrix1, pos);
+    glm::vec3 myScale(2.0f, 2.0f, 2.0f);
+    glm::mat4 myScalingMatrix = glm::scale(myTranslationMatrix, myScale);
+
+    //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
+    //glm::mat4 myRotationMatrix = glm::rotate(myScalingMatrix, 45.0f, myRotationAxis);
+    glm::mat4 MVP1 = ProjectionMatrixf * ViewMatrixf * myScalingMatrix;
+
+    // Send our transformation to the currently bound shader,
+    // in the "MVP" uniform
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP1[0][0]);
+    glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix1[0][0]);
+
+
+    // Bind our texture in Texture Unit 0
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, Texture);
+    // Set our "myTextureSampler" sampler to use Texture Unit 0
+    //glUniform1i(TextureID, 0);
+
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+            0,                  // attribute
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void *) 0            // array buffer offset
+    );
+
+    // 2nd attribute buffer : UVs
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glVertexAttribPointer(
+            1,                                // attribute
+            2,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void *) 0                          // array buffer offset
+    );
+
+    // 3rd attribute buffer : normals
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glVertexAttribPointer(
+            2,                                // attribute
+            3,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void *) 0                          // array buffer offset
+    );
+
+    // Index buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+
+    // Draw the triangles !
+    glDrawElements(
+            GL_TRIANGLES,      // mode
+            indices.size(),    // count
+            GL_UNSIGNED_SHORT,   // type
+            (void *) 0           // element array buffer offset
+    );
+}
 
 int main( void )
 {
@@ -129,7 +290,7 @@ int main( void )
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( 1024, 768, "Final Project", NULL, NULL);
+    window = glfwCreateWindow( 1920, 1080, "Final Project", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -179,11 +340,14 @@ int main( void )
     GLuint ViewMatrixID = glGetUniformLocation(programID, "V");
     GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
 
-    // Load the texture
+    // Load the textures
     GLuint Texture = loadBMP_custom("footballfield.bmp");
+    GLuint textureSuzie = loadDDS("uvmap.DDS");
 
     // Get a handle for our "myTextureSampler" uniform
     GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+
+    //// Football Field ////
 
     // Read our .obj file
     std::vector<glm::vec3> vertices;
@@ -198,7 +362,6 @@ int main( void )
     indexVBO(vertices, uvs, normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
 
     // Load it into a VBO
-
     GLuint vertexbuffer;
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -220,9 +383,91 @@ int main( void )
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
 
+    ////Suzie ////
+
+    // Read our .obj file
+    std::vector<glm::vec3> verticesSuzie;
+    std::vector<glm::vec2> uvsSuzie;
+    std::vector<glm::vec3> normalsSuzie;
+    bool resSuzie = loadOBJ("suzanne.obj", verticesSuzie, uvsSuzie, normalsSuzie);
+
+    std::vector<unsigned short> indicesSuzie;
+    std::vector<glm::vec3> indexed_verticesSuzie;
+    std::vector<glm::vec2> indexed_uvsSuzie;
+    std::vector<glm::vec3> indexed_normalsSuzie;
+    indexVBO(verticesSuzie, uvsSuzie, normalsSuzie, indicesSuzie, indexed_verticesSuzie, indexed_uvsSuzie, indexed_normalsSuzie);
+
+    // Load it into a VBO
+    GLuint vertexbufferSuzie;
+    glGenBuffers(1, &vertexbufferSuzie);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbufferSuzie);
+    glBufferData(GL_ARRAY_BUFFER, indexed_verticesSuzie.size() * sizeof(glm::vec3), &indexed_verticesSuzie[0], GL_STATIC_DRAW);
+
+    GLuint uvbufferSuzie;
+    glGenBuffers(1, &uvbufferSuzie);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbufferSuzie);
+    glBufferData(GL_ARRAY_BUFFER, indexed_uvsSuzie.size() * sizeof(glm::vec2), &indexed_uvsSuzie[0], GL_STATIC_DRAW);
+
+    GLuint normalbufferSuzie;
+    glGenBuffers(1, &normalbufferSuzie);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbufferSuzie);
+    glBufferData(GL_ARRAY_BUFFER, indexed_normalsSuzie.size() * sizeof(glm::vec3), &indexed_normalsSuzie[0], GL_STATIC_DRAW);
+
+    // Generate a buffer for the indices as well
+    GLuint elementbufferSuzie;
+    glGenBuffers(1, &elementbufferSuzie);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbufferSuzie);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSuzie.size() * sizeof(unsigned short), &indicesSuzie[0] , GL_STATIC_DRAW);
+
     // Get a handle for our "LightPosition" uniform
     glUseProgram(programID);
     GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+
+    //// Sphere ////
+
+    // Create and compile our GLSL program from the shaders
+    GLuint programIDSphere = LoadShaders( "StandardShading.vertexshader", "SingleColor.fragmentshader" );
+
+    // Get a handle for our "MVP" uniform
+    GLuint MatrixIDSphere = glGetUniformLocation(programIDSphere, "MVP");
+    GLuint ViewMatrixIDSphere = glGetUniformLocation(programIDSphere, "V");
+    GLuint ModelMatrixIDSphere = glGetUniformLocation(programIDSphere, "M");
+
+    // Read our .obj file
+    std::vector<glm::vec3> verticesSphere;
+    std::vector<glm::vec2> uvsSphere;
+    std::vector<glm::vec3> normalsSphere;
+    bool resSphere = loadOBJ("webtrcc.obj", verticesSphere, uvsSphere, normalsSphere);
+
+    std::vector<unsigned short> indicesSphere;
+    std::vector<glm::vec3> indexed_verticesSphere;
+    std::vector<glm::vec2> indexed_uvsSphere;
+    std::vector<glm::vec3> indexed_normalsSphere;
+    indexVBO(verticesSphere, uvsSphere, normalsSphere, indicesSphere, indexed_verticesSphere, indexed_uvsSphere, indexed_normalsSphere);
+
+    // Load it into a VBO
+    GLuint vertexbufferSphere;
+    glGenBuffers(1, &vertexbufferSphere);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbufferSphere);
+    glBufferData(GL_ARRAY_BUFFER, indexed_verticesSphere.size() * sizeof(glm::vec3), &indexed_verticesSphere[0], GL_STATIC_DRAW);
+
+    GLuint uvbufferSphere;
+    glGenBuffers(1, &uvbufferSphere);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbufferSphere);
+    glBufferData(GL_ARRAY_BUFFER, indexed_uvsSphere.size() * sizeof(glm::vec2), &indexed_uvsSphere[0], GL_STATIC_DRAW);
+
+    GLuint normalbufferSphere;
+    glGenBuffers(1, &normalbufferSphere);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbufferSphere);
+    glBufferData(GL_ARRAY_BUFFER, indexed_normalsSphere.size() * sizeof(glm::vec3), &indexed_normalsSphere[0], GL_STATIC_DRAW);
+
+    // Generate a buffer for the indices as well
+    GLuint elementbufferSphere;
+    glGenBuffers(1, &elementbufferSphere);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbufferSphere);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSphere.size() * sizeof(unsigned short), &indicesSphere[0] , GL_STATIC_DRAW);
+
+    glm::vec3 posSphere = glm::vec3(0.0f, 0.0f, 50.0f);
 
     // For speed computation
     double lastTime = glfwGetTime();
@@ -251,145 +496,26 @@ int main( void )
         //glm::mat4 ViewMatrix = getViewMatrix();
 
         renderFootballField(programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, Texture, TextureID, vertexbuffer, normalbuffer, uvbuffer, elementbuffer, indices);
-        /*
-        ////// Start of the rendering of the Football Field object //////
-        // Use our shader
-        glUseProgram(programID);
+        drawSphere(posSphere, programIDSphere, LightID, ViewMatrixIDSphere, MatrixIDSphere, ModelMatrixIDSphere, vertexbufferSphere, normalbufferSphere, uvbufferSphere, elementbufferSphere, indicesSphere);
+        for (int i =0 ; i<15; i++)
+        {
+            if(i < 5)
+            {
+                glm::vec3 posSuzie = glm::vec3(13.0f - i*6.7f, 7.0f, 0.0f);
+                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+            }
+            else if( i < 10)
+            {
+                glm::vec3 posSuzie = glm::vec3(13.0f - (i-5)*6.7f, -7.0f, 0.0f);
+                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+            }
+            else
+            {
+                glm::vec3 posSuzie = glm::vec3(13.0f - (i-10)*6.7f, 0.0f, 0.0f);
+                renderASuzie(posSuzie, programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID, textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie, uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+            }
 
-        glm::vec3 lightPos = glm::vec3(0,0,31);
-        glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
-        glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
-
-        glm::mat4 ModelMatrix1 = glm::mat4(1.0);
-        glm::vec3 myScale( 0.1f, 0.1f, 0.1f);
-        glm::mat4 myScalingMatrix = glm::scale(glm::mat4(1.0), myScale);
-
-        glm::vec3 myRotationAxis( 1.0f, 0.0f, 0.0f);
-        glm::mat4 myRotationMatrix = glm::rotate(myScalingMatrix, 45.0f, myRotationAxis );
-
-        glm::mat4 MVP1 = ProjectionMatrixf * ViewMatrixf * myRotationMatrix;
-
-        // Send our transformation to the currently bound shader,
-        // in the "MVP" uniform
-        glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP1[0][0]);
-        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix1[0][0]);
-
-
-        // Bind our texture in Texture Unit 0
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, Texture);
-        // Set our "myTextureSampler" sampler to use Texture Unit 0
-        glUniform1i(TextureID, 0);
-
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(
-                0,                  // attribute
-                3,                  // size
-                GL_FLOAT,           // type
-                GL_FALSE,           // normalized?
-                0,                  // stride
-                (void*)0            // array buffer offset
-        );
-
-        // 2nd attribute buffer : UVs
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-        glVertexAttribPointer(
-                1,                                // attribute
-                2,                                // size
-                GL_FLOAT,                         // type
-                GL_FALSE,                         // normalized?
-                0,                                // stride
-                (void*)0                          // array buffer offset
-        );
-
-        // 3rd attribute buffer : normals
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glVertexAttribPointer(
-                2,                                // attribute
-                3,                                // size
-                GL_FLOAT,                         // type
-                GL_FALSE,                         // normalized?
-                0,                                // stride
-                (void*)0                          // array buffer offset
-        );
-
-        // Index buffer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
-        // Draw the triangles !
-        glDrawElements(
-                GL_TRIANGLES,      // mode
-                indices.size(),    // count
-                GL_UNSIGNED_SHORT,   // type
-                (void*)0           // element array buffer offset
-        );
-        ////// End of rendering of the football field object //////
-        */
-        /*
-        ////// Start of the rendering of the second object //////
-
-        // In our very specific case, the 2 objects use the same shader.
-        // So it's useless to re-bind the "programID" shader, since it's already the current one.
-        //glUseProgram(programID);
-
-        // Similarly : don't re-set the light position and camera matrix in programID,
-        // it's still valid !
-        // *** You would have to do it if you used another shader ! ***
-        //glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
-        //glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
-
-
-        // Again : this is already done, but this only works because we use the same shader.
-        //// Bind our texture in Texture Unit 0
-        //glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, Texture);
-        //// Set our "myTextureSampler" sampler to use Texture Unit 0
-        //glUniform1i(TextureID, 0);
-
-
-        // BUT the Model matrix is different (and the MVP too)
-        glm::mat4 ModelMatrix2 = glm::mat4(1.0);
-        ModelMatrix2 = glm::translate(ModelMatrix2, glm::vec3(2.0f, 0.0f, 0.0f));
-        glm::mat4 MVP2 = ProjectionMatrix * ViewMatrix * ModelMatrix2;
-
-        // Send our transformation to the currently bound shader,
-        // in the "MVP" uniform
-        glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP2[0][0]);
-        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix2[0][0]);
-
-
-        // The rest is exactly the same as the first object
-
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        // 2nd attribute buffer : UVs
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        // 3rd attribute buffer : normals
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-        // Index buffer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
-        // Draw the triangles !
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, (void*)0);
-
-
-        ////// End of rendering of the second object //////
-
-       */
-
+        }
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
@@ -408,8 +534,21 @@ int main( void )
     glDeleteBuffers(1, &uvbuffer);
     glDeleteBuffers(1, &normalbuffer);
     glDeleteBuffers(1, &elementbuffer);
+
+    glDeleteBuffers(1, &vertexbufferSuzie);
+    glDeleteBuffers(1, &uvbufferSuzie);
+    glDeleteBuffers(1, &normalbufferSuzie);
+    glDeleteBuffers(1, &elementbufferSuzie);
+
+    glDeleteBuffers(1, &vertexbufferSphere);
+    glDeleteBuffers(1, &uvbufferSphere);
+    glDeleteBuffers(1, &normalbufferSphere);
+    glDeleteBuffers(1, &elementbufferSphere);
+    glDeleteProgram(programIDSphere);
+
     glDeleteProgram(programID);
     glDeleteTextures(1, &Texture);
+    glDeleteTextures(1, &textureSuzie);
     glDeleteVertexArrays(1, &VertexArrayID);
 
     // Close OpenGL window and terminate GLFW
