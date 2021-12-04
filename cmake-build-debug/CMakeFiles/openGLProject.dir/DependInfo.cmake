@@ -13,8 +13,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/mehak/CLionProjects/openGLProject/common/shader.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/shader.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/common/texture.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/texture.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/common/vboindexer.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj"
+  "C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/main.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/main.cpp.obj"
-  "C:/Users/mehak/CLionProjects/openGLProject/main1.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/main1.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

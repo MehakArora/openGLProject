@@ -1138,6 +1138,8 @@ GL/glu.h
 
 ../include/common/objloader.hpp
 
+../include/common/renderscene.h
+
 ../include/common/shader.hpp
 
 ../include/common/texture.hpp
@@ -1169,4 +1171,6 @@ common/objloader.hpp
 -
 common/vboindexer.hpp
 -
+common/renderscene.h
+C:/Users/mehak/CLionProjects/openGLProject/common/renderscene.h
 

@@ -65,24 +65,10 @@ include CMakeFiles/openGLProject.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/openGLProject.dir/flags.make
 
-CMakeFiles/openGLProject.dir/main1.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
-CMakeFiles/openGLProject.dir/main1.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
-CMakeFiles/openGLProject.dir/main1.cpp.obj: ../main1.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/openGLProject.dir/main1.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\main1.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\main1.cpp
-
-CMakeFiles/openGLProject.dir/main1.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/openGLProject.dir/main1.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\mehak\CLionProjects\openGLProject\main1.cpp > CMakeFiles\openGLProject.dir\main1.cpp.i
-
-CMakeFiles/openGLProject.dir/main1.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/openGLProject.dir/main1.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\mehak\CLionProjects\openGLProject\main1.cpp -o CMakeFiles\openGLProject.dir\main1.cpp.s
-
 CMakeFiles/openGLProject.dir/main.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/main.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/openGLProject.dir/main.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/openGLProject.dir/main.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\main.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\main.cpp
 
 CMakeFiles/openGLProject.dir/main.cpp.i: cmake_force
@@ -96,7 +82,7 @@ CMakeFiles/openGLProject.dir/main.cpp.s: cmake_force
 CMakeFiles/openGLProject.dir/common/shader.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/common/shader.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/common/shader.cpp.obj: ../common/shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/openGLProject.dir/common/shader.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/openGLProject.dir/common/shader.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\common\shader.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\common\shader.cpp
 
 CMakeFiles/openGLProject.dir/common/shader.cpp.i: cmake_force
@@ -110,7 +96,7 @@ CMakeFiles/openGLProject.dir/common/shader.cpp.s: cmake_force
 CMakeFiles/openGLProject.dir/common/controls.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/common/controls.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/common/controls.cpp.obj: ../common/controls.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/openGLProject.dir/common/controls.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/openGLProject.dir/common/controls.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\common\controls.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\common\controls.cpp
 
 CMakeFiles/openGLProject.dir/common/controls.cpp.i: cmake_force
@@ -124,7 +110,7 @@ CMakeFiles/openGLProject.dir/common/controls.cpp.s: cmake_force
 CMakeFiles/openGLProject.dir/common/texture.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/common/texture.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/common/texture.cpp.obj: ../common/texture.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/openGLProject.dir/common/texture.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/openGLProject.dir/common/texture.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\common\texture.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\common\texture.cpp
 
 CMakeFiles/openGLProject.dir/common/texture.cpp.i: cmake_force
@@ -138,7 +124,7 @@ CMakeFiles/openGLProject.dir/common/texture.cpp.s: cmake_force
 CMakeFiles/openGLProject.dir/common/objloader.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/common/objloader.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/common/objloader.cpp.obj: ../common/objloader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/openGLProject.dir/common/objloader.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/openGLProject.dir/common/objloader.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\common\objloader.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\common\objloader.cpp
 
 CMakeFiles/openGLProject.dir/common/objloader.cpp.i: cmake_force
@@ -152,7 +138,7 @@ CMakeFiles/openGLProject.dir/common/objloader.cpp.s: cmake_force
 CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
 CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
 CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj: ../common/vboindexer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\common\vboindexer.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\common\vboindexer.cpp
 
 CMakeFiles/openGLProject.dir/common/vboindexer.cpp.i: cmake_force
@@ -163,26 +149,40 @@ CMakeFiles/openGLProject.dir/common/vboindexer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/openGLProject.dir/common/vboindexer.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\mehak\CLionProjects\openGLProject\common\vboindexer.cpp -o CMakeFiles\openGLProject.dir\common\vboindexer.cpp.s
 
+CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj: CMakeFiles/openGLProject.dir/flags.make
+CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj: CMakeFiles/openGLProject.dir/includes_CXX.rsp
+CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj: ../include/common/renderscene.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mehak\CLionProjects\openGLProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\openGLProject.dir\include\common\renderscene.cpp.obj -c C:\Users\mehak\CLionProjects\openGLProject\include\common\renderscene.cpp
+
+CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\mehak\CLionProjects\openGLProject\include\common\renderscene.cpp > CMakeFiles\openGLProject.dir\include\common\renderscene.cpp.i
+
+CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\mehak\CLionProjects\openGLProject\include\common\renderscene.cpp -o CMakeFiles\openGLProject.dir\include\common\renderscene.cpp.s
+
 # Object files for target openGLProject
 openGLProject_OBJECTS = \
-"CMakeFiles/openGLProject.dir/main1.cpp.obj" \
 "CMakeFiles/openGLProject.dir/main.cpp.obj" \
 "CMakeFiles/openGLProject.dir/common/shader.cpp.obj" \
 "CMakeFiles/openGLProject.dir/common/controls.cpp.obj" \
 "CMakeFiles/openGLProject.dir/common/texture.cpp.obj" \
 "CMakeFiles/openGLProject.dir/common/objloader.cpp.obj" \
-"CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj"
+"CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj" \
+"CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj"
 
 # External object files for target openGLProject
 openGLProject_EXTERNAL_OBJECTS =
 
-openGLProject.exe: CMakeFiles/openGLProject.dir/main1.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/main.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/common/shader.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/common/controls.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/common/texture.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/common/objloader.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/common/vboindexer.cpp.obj
+openGLProject.exe: CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj
 openGLProject.exe: CMakeFiles/openGLProject.dir/build.make
 openGLProject.exe: CMakeFiles/openGLProject.dir/linklibs.rsp
 openGLProject.exe: CMakeFiles/openGLProject.dir/objects1.rsp

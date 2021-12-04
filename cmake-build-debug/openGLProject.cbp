@@ -116,10 +116,13 @@
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/vboindexer.hpp">
 			<Option target="openGLProject"/>
 		</Unit>
-		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/main.cpp">
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.cpp">
 			<Option target="openGLProject"/>
 		</Unit>
-		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/main1.cpp">
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/include/common/renderscene.h">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/main.cpp">
 			<Option target="openGLProject"/>
 		</Unit>
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/CMakeLists.txt">

@@ -248,6 +248,30 @@ common/vboindexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/common/vboindexer.cpp.s
 .PHONY : common/vboindexer.cpp.s
 
+include/common/renderscene.obj: include/common/renderscene.cpp.obj
+.PHONY : include/common/renderscene.obj
+
+# target to build an object file
+include/common/renderscene.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.obj
+.PHONY : include/common/renderscene.cpp.obj
+
+include/common/renderscene.i: include/common/renderscene.cpp.i
+.PHONY : include/common/renderscene.i
+
+# target to preprocess a source file
+include/common/renderscene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.i
+.PHONY : include/common/renderscene.cpp.i
+
+include/common/renderscene.s: include/common/renderscene.cpp.s
+.PHONY : include/common/renderscene.s
+
+# target to generate assembly for a file
+include/common/renderscene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/include/common/renderscene.cpp.s
+.PHONY : include/common/renderscene.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -271,30 +295,6 @@ main.s: main.cpp.s
 main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/main.cpp.s
 .PHONY : main.cpp.s
-
-main1.obj: main1.cpp.obj
-.PHONY : main1.obj
-
-# target to build an object file
-main1.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/main1.cpp.obj
-.PHONY : main1.cpp.obj
-
-main1.i: main1.cpp.i
-.PHONY : main1.i
-
-# target to preprocess a source file
-main1.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/main1.cpp.i
-.PHONY : main1.cpp.i
-
-main1.s: main1.cpp.s
-.PHONY : main1.s
-
-# target to generate assembly for a file
-main1.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/main1.cpp.s
-.PHONY : main1.cpp.s
 
 # Help Target
 help:
@@ -320,12 +320,12 @@ help:
 	@echo ... common/vboindexer.obj
 	@echo ... common/vboindexer.i
 	@echo ... common/vboindexer.s
+	@echo ... include/common/renderscene.obj
+	@echo ... include/common/renderscene.i
+	@echo ... include/common/renderscene.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... main1.obj
-	@echo ... main1.i
-	@echo ... main1.s
 .PHONY : help
 
 
