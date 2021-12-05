@@ -155,7 +155,6 @@ public:
         this->pos = i;
 
         updateVectors();
-
     }
 
 
@@ -170,7 +169,7 @@ public:
         //curPos.y *= normalY;
 
         double fMax = 20.0;
-        double k = 100;
+        double k = 10;
         glm::vec3  force;
         glm::vec3 newVel;
         glm::vec3 newPos;
@@ -221,10 +220,23 @@ public:
                 circularMotion = true;
                 circularStart = currentTime;
                 updateVectors();
-                this->velocity = this->tangentVector;
+                this->velocity.x = 10*this->tangentVector.x;
+                this->velocity.y = 10*this->tangentVector.y;
+                this->velocity.z = 10*this->tangentVector.z;
 
             }
 
+            glm::vec3 posSuzie = this->position;
+            glm::vec3 target = glm::vec3(0,0,50);
+            glm::vec3 directionVector = subtract(target, posSuzie);
+            double distFromTarget = distance(target, posSuzie);
+            directionVector.x = -1*directionVector.x / distFromTarget;
+            directionVector.y = -1*directionVector.y / distFromTarget;
+            directionVector.z = -1*directionVector.z / distFromTarget;
+
+            this->directionVector = directionVector;
+
+            std::cout<<this->velocity.x*this->directionVector.x + this->velocity.y*this->directionVector.y + this->velocity.z*this->directionVector.z <<std::endl;
 
             double vMax = 10.0;
             double fSpring = k * (10 - distFromTarget);
@@ -569,7 +581,7 @@ int main( void )
             }
 
             if(check)
-                allDone =true;
+                allDone = true;
 
         }
 
@@ -587,10 +599,17 @@ int main( void )
 
         for (int i =0 ; i<15; i++)
         {
+            int color;
+            if(i <5 ){
+                color = 5000;
+            }
+            else{
+                color = 0;
+            }
             renderASuzie(suziePos[i], ViewMatrixf, ProjectionMatrixf,
                          programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
                          textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
-                         uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+                         uvbufferSuzie, elementbufferSuzie, indicesSuzie, color);
         }
 
         // Swap buffers
@@ -599,7 +618,7 @@ int main( void )
 
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-           glfwWindowShouldClose(window) == 0 );
+           glfwWindowShouldClose(window) == 0 && not allDone );
 
     // Cleanup VBO and shader
     glDeleteBuffers(1, &vertexbuffer);

@@ -111,20 +111,20 @@ void renderASuzie(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &
                   const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID,
                   const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,
                   const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer,
-                  const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices)
+                  const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices, int color)
 {
 
     // Use our shader
     glUseProgram(programID);
 
-    glm::vec3 lightPos = glm::vec3(0, 0, 31);
+    glm::vec3 lightPos = glm::vec3(0, 0, 31 + color);
     glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
     glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE,
                        &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
 
     glm::mat4 ModelMatrix1 = glm::mat4(1.0);
     glm::mat4 myTranslationMatrix = glm::translate(ModelMatrix1, pos);
-    glm::vec3 myScale(1.5f, 1.5f, 1.5f);
+    glm::vec3 myScale(1.2f, 1.2f, 1.2f);
     glm::mat4 myScalingMatrix = glm::scale(myTranslationMatrix, myScale);
 
     //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
