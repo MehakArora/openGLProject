@@ -33,7 +33,7 @@ void renderFootballField(const glm::mat4 &ViewMatrixf,
                        &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"
 
     glm::mat4 ModelMatrix1 = glm::mat4(1.0);
-    glm::vec3 myScale(0.3f, 0.3f, 0.3f);
+    glm::vec3 myScale(0.35f, 0.35f, 1.0f);
     glm::mat4 myScalingMatrix = glm::scale(glm::mat4(1.0), myScale);
 
     //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
@@ -124,7 +124,7 @@ void renderASuzie(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &
 
     glm::mat4 ModelMatrix1 = glm::mat4(1.0);
     glm::mat4 myTranslationMatrix = glm::translate(ModelMatrix1, pos);
-    glm::vec3 myScale(2.0f, 2.0f, 2.0f);
+    glm::vec3 myScale(1.5f, 1.5f, 1.5f);
     glm::mat4 myScalingMatrix = glm::scale(myTranslationMatrix, myScale);
 
     //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);
@@ -213,7 +213,7 @@ void drawSphere(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &Pr
 
     glm::mat4 ModelMatrix1 = glm::mat4(1.0);
     glm::mat4 myTranslationMatrix = glm::translate(ModelMatrix1, pos);
-    glm::vec3 myScale(2.0f, 2.0f, 2.0f);
+    glm::vec3 myScale(7.0f, 7.0f, 7.0f);
     glm::mat4 myScalingMatrix = glm::scale(myTranslationMatrix, myScale);
 
     //glm::vec3 myRotationAxis(1.0f, 0.0f, 0.0f);

@@ -1149,9 +1149,13 @@ GL/glu.h
 C:/Users/mehak/CLionProjects/openGLProject/main.cpp
 stdio.h
 -
+iostream
+-
 stdlib.h
 -
 vector
+-
+math.h
 -
 GL/glew.h
 -

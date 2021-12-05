@@ -1,7 +1,9 @@
 // Include standard headers
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <math.h>
 
 // Include GLEW
 #include <GL/glew.h>
@@ -22,14 +24,155 @@ using namespace glm;
 #include <common/vboindexer.hpp>
 #include "common/renderscene.h"
 
-glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(90.0f), 5.0f / 3.0f, 0.1f, 100.0f);
+#define PI 3.14159265
+
+glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 200.0f);
 // Camera matrix
 glm::mat4 ViewMatrixf       = glm::lookAt(
-        glm::vec3(0,60,55), // Camera is at (4,3,3), in World Space
+        glm::vec3(0,130,80), // Camera is at (4,3,3), in World Space
         glm::vec3(0,0,0), // and looks at the origin
         glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 );
 
+double distance(glm::vec3 p1, glm::vec3 p2)
+{
+    glm::vec3 d;
+    d.x = std::abs(p1.x - p2.x);
+    d.y = std::abs(p1.y - p2.y);
+    d.z = std::abs(p1.z - p2.z);
+
+    double dist = std::sqrt(std::pow(d.x, 2) + std::pow(d.y, 2) + std::pow(d.z, 2));
+
+    return dist;
+}
+
+glm::vec3 subtract(glm::vec3 p1, glm::vec3 p2)
+{
+    glm::vec3 d;
+    d.x = p1.x - p2.x;
+    d.y = p1.y - p2.y;
+    d.z = p1.z - p2.z;
+    return d;
+}
+
+class ECE_UAV
+{
+private:
+
+    glm::vec3 position;
+    glm::vec3 velocity;
+    double mass;
+    glm::vec3 acceleration;
+
+public:
+
+    void ECE_UAV ()
+    {
+        position = glm::vec3 (0.0f,0.0f,0.0f);
+        velocity = glm::vec3 (0.0f,0.0f,0.0f);
+        mass = 1;
+        acceleration = glm::vec3 (0.0f,0.0f,0.0f);
+    }
+
+    void initPos(int i)
+    {
+        glm::vec3 posSuzie;
+        for (int i =0 ; i<15; i++)
+        {
+            if(i < 5)
+            {
+                posSuzie = glm::vec3(45.72f - i*23.5f, 24.4f, 0.0f);
+            }
+            else if( i < 10)
+            {
+                posSuzie = glm::vec3(45.72f - (i-5)*23.5f, -24.4f, 0.0f);
+            }
+            else
+            {
+                posSuzie = glm::vec3(45.72f - (i-10)*23.5f, 0.0f, 0.0f);
+            }
+        }
+
+        this->position = posSuzie;
+    }
+
+    glm::vec3 updatePosition(double delta, double distanceThreshold)
+    {
+        glm::vec3 target = glm::vec3(0,0,50);
+
+        double distFromTarget = distance(target, this->position);
+        glm::vec3 directionVector = subtract(target, this->position);
+        directionVector.x = directionVector.x / distFromTarget;
+        directionVector.y = directionVector.y / distFromTarget;
+        directionVector.z = directionVector.z / distFromTarget;
+
+        double vMax = 2.0;
+        double fMax = 20.0;
+        glm::vec3  force;
+
+        //theta = std::atan2(directionVector.y, directionVector.x) * 180 / PI;
+        //phi = std::atan2(std::sqrt(std::pow(directionVector.x, 2) + std::pow(directionVector.y, 2)), directionVector.z) * 180/PI;
+
+        if( distFromTarget >= distanceThreshold)
+        {
+
+            //Let angle between x and y component be theta and angle between z and xy direction vector be phi
+            force.x = directionVector.x * (fMax - 10);//20 * std::sin(phi * PI / 180) * std::cos(theta * PI / 180);
+            force.y = directionVector.y * (fMax - 10);//20 * std::sin(phi * PI / 180) * std::sin(theta * PI / 180);
+            force.z = directionVector.z * (fMax - 10);//20 * std::cos(phi * PI / 180) - 10;
+
+        }
+        else
+        {
+            //Let angle between x and y component be theta and angle between z and xy direction vector be phi
+            force.x = 0;//20 * std::sin(phi * PI / 180) * std::cos(theta * PI / 180);
+            force.y =0 ;//20 * std::sin(phi * PI / 180) * std::sin(theta * PI / 180);
+            force.z = 0; //20 * std::cos(phi * PI / 180) - 10;
+        }
+
+        //Get acceleration from force vector
+        this->acceleration.x = force.x / this->mass.x;
+        this->acceleration.y = force.y / this->mass.y;
+        this->acceleration.z = force.z / this->mass.z;
+
+        //Get New Velocity
+        glm::vec3 newVel = glm::vec3(this->velocity.x + this->acceleration.x * delta ,
+                                     this->velocity.y + this->acceleration.y * delta ,
+                                     this->velocity.z + this->acceleration.z * delta );
+
+        double vMag = distance(newVel, glm::vec3(0.0f, 0.0f, 0.0f));
+        std::cout<< directionVector.x << " " << directionVector.y << " " << directionVector.z << " " << vMag << std::endl;
+        if( vMag > vMax)
+        {
+
+            newVel.x = (newVel.x/vMag)*2;
+            newVel.y = (newVel.y/vMag)*2;
+            newVel.z = (newVel.z/vMag)*2;
+
+            this->acceleration = subtract(newVel, this->velocity)/delta;
+        }
+
+        glm::vec3 newPos = glm::vec3 (this->position.x + 0.5 * (this->velocity.x + newVel.x) * delta ,
+                                      this->position.y + 0.5 * (this->velocity.y + newVel.y) * delta ,
+                                      this->position.z + 0.5 * (this->velocity.z + newVel.z) * delta );
+
+        this->velocity = newVel;
+        this->position = newPos;
+        return this->position;
+
+    }
+/*
+    glm::vec3 updatePosition(glm::vec3 curPos, glm::vec3 curVel, glm::vec3 force, double delta)
+    {
+        glm::vec3 newPos = glm::vec3 (curPos.x + curVel.x*delta + 0.5*force.x*delta * delta ,
+                                      curPos.y + curVel.y*delta + 0.5*force.y*delta * delta ,
+                                      curPos.z + curVel.z*delta + 0.5*force.z*delta * delta );
+        //std::cout<< newPos.x << " " << newPos.y << " " << newPos.z << " " << distance(newPos, glm::vec3(0.0f, 0.0f, 50.0f)) << std::endl;
+
+        return newPos;
+    }
+*/
+};
 
 
 
@@ -228,44 +371,30 @@ int main( void )
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbufferSphere);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSphere.size() * sizeof(unsigned short), &indicesSphere[0] , GL_STATIC_DRAW);
 
-    glm::vec3 posSphere = glm::vec3(0.0f, 0.0f, 50.0f);
+    //z is 60 here because we want the center of the sphere to be at the target point (0,0,50) but this object renders with the top of the sphere as origin
+    glm::vec3 posSphere = glm::vec3(0.0f, 0.0f, 60.0f);
 
     // For speed computation
     double lastTime = glfwGetTime();
+    double startTime = lastTime;
+    double renderTime = lastTime;
     int nbFrames = 0;
     bool startFlying = false;
 
-    std::vector<glm::vec3> suziePos;
 
     //Initialize Suzie Positions
-    glm::vec3 posSuzie;
-    for (int i =0 ; i<15; i++)
-    {
-        if(i < 5)
-        {
-            posSuzie = glm::vec3(39.0f - i*20.0f, 20.0f, 0.0f);
-            suziePos.push_back(posSuzie);
-        }
-        else if( i < 10)
-        {
-            posSuzie = glm::vec3(39.0f - (i-5)*20.0f, -20.0f, 0.0f);
-            suziePos.push_back(posSuzie);
-
-        }
-        else
-        {
-            posSuzie = glm::vec3(39.0f - (i-10)*20.0f, 0.0f, 0.0f);
-            suziePos.push_back(posSuzie);
-        }
-    }
+    ECE_UAV *uavs = new ECE_UAV[15];
 
     do{
 
         // Measure speed
         double currentTime = glfwGetTime();
+        double delta = currentTime - lastTime;
+        lastTime = currentTime;
         nbFrames++;
 
-        if(currentTime - lastTime >= 5){
+        if(currentTime - startTime >= 5 && not startFlying)
+        {
             printf("Start Flying");
             startFlying = true;
         }
@@ -278,7 +407,17 @@ int main( void )
         //computeMatricesFromInputs();
         //glm::mat4 ProjectionMatrix = getProjectionMatrix();
         //glm::mat4 ViewMatrix = getViewMatrix();
+        /*
+        if(startFlying)
+        {
+            for (int i = 0; i<15; i++)
+            {
+                glm::vec3 curPos = suziePos[i];
+                suziePos[i].z = curPos.z + 1;
+            }
 
+        }
+        */
         renderFootballField(ViewMatrixf, ProjectionMatrixf,
                             programID, LightID, ViewMatrixID,
                             MatrixID, ModelMatrixID, Texture, TextureID,
@@ -289,57 +428,40 @@ int main( void )
                    MatrixIDSphere, ModelMatrixIDSphere,
                    vertexbufferSphere, normalbufferSphere, uvbufferSphere, elementbufferSphere, indicesSphere);
 
-        //Draw Suzies
-        for (int i =0 ; i<15; i++)
+        if(currentTime - renderTime >= 0.03)
         {
-            if(i < 5)
+            renderTime = currentTime;
+            for (int i =0 ; i<15; i++)
             {
-                if(startFlying)
-                {
-                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
-                }
-                else
+
+                if(not startFlying)
                 {
                     posSuzie = suziePos[i];
                 }
-                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
-                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
-                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
-                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
-            }
-            else if( i < 10)
-            {
-                if(startFlying)
-                {
-                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
-                }
                 else
                 {
-                    posSuzie = suziePos[i];
+
+                    glm::vec3 newVel;
+                    glm::vec3 force = updateVelocity(suziePos[i], suzieVel[i], 0.03, 10.0);
+                    posSuzie = updatePosition(suziePos[i], suzieVel[i],force,  0.03);
+                    suziePos[i] = posSuzie;
+                    suzieVel[i].x = suzieVel[i].x + force.x * delta;
+                    suzieVel[i].y = suzieVel[i].y + force.y * delta;
+                    suzieVel[i].z = suzieVel[i].z + force.z * delta;
+
                 }
-                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
-                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
-                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
-                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
-            }
-            else
-            {
-                if(startFlying)
-                {
-                    posSuzie = glm::vec3(0.0f, 0.0f, 0.0f);
-                }
-                else
-                {
-                    posSuzie = suziePos[i];
-                }
-                renderASuzie(posSuzie, ViewMatrixf, ProjectionMatrixf,
-                             programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
-                             textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
-                             uvbufferSuzie, elementbufferSuzie, indicesSuzie);
             }
 
         }
 
+        //Draw Suzies
+        for (int i =0 ; i<15; i++)
+        {
+            renderASuzie(suziePos[i], ViewMatrixf, ProjectionMatrixf,
+                         programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
+                         textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
+                         uvbufferSuzie, elementbufferSuzie, indicesSuzie);
+        }
 
         // Swap buffers
         glfwSwapBuffers(window);
