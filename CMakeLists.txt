@@ -15,7 +15,7 @@ add_executable(openGLProject main.cpp
         common/vboindexer.hpp
         include/common/renderscene.cpp
         include/common/renderscene.h
-        )
+        ECE_UAV.h ECE_UAV.cpp)
 add_definitions(-DGLEW_STATIC)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)

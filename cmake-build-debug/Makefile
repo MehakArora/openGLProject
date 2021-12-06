@@ -128,6 +128,30 @@ openGLProject/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/build
 .PHONY : openGLProject/fast
 
+ECE_UAV.obj: ECE_UAV.cpp.obj
+.PHONY : ECE_UAV.obj
+
+# target to build an object file
+ECE_UAV.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/ECE_UAV.cpp.obj
+.PHONY : ECE_UAV.cpp.obj
+
+ECE_UAV.i: ECE_UAV.cpp.i
+.PHONY : ECE_UAV.i
+
+# target to preprocess a source file
+ECE_UAV.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/ECE_UAV.cpp.i
+.PHONY : ECE_UAV.cpp.i
+
+ECE_UAV.s: ECE_UAV.cpp.s
+.PHONY : ECE_UAV.s
+
+# target to generate assembly for a file
+ECE_UAV.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\openGLProject.dir\build.make CMakeFiles/openGLProject.dir/ECE_UAV.cpp.s
+.PHONY : ECE_UAV.cpp.s
+
 common/controls.obj: common/controls.cpp.obj
 .PHONY : common/controls.obj
 
@@ -305,6 +329,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... openGLProject
+	@echo ... ECE_UAV.obj
+	@echo ... ECE_UAV.i
+	@echo ... ECE_UAV.s
 	@echo ... common/controls.obj
 	@echo ... common/controls.i
 	@echo ... common/controls.s

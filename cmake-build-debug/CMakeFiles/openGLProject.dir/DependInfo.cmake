@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/ECE_UAV.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/common/controls.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/controls.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/common/objloader.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/objloader.cpp.obj"
   "C:/Users/mehak/CLionProjects/openGLProject/common/shader.cpp" "C:/Users/mehak/CLionProjects/openGLProject/cmake-build-debug/CMakeFiles/openGLProject.dir/common/shader.cpp.obj"

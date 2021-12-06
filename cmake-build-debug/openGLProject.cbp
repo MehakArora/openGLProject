@@ -86,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.cpp">
+			<Option target="openGLProject"/>
+		</Unit>
+		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.h">
+			<Option target="openGLProject"/>
+		</Unit>
 		<Unit filename="C:/Users/mehak/CLionProjects/openGLProject/common/controls.cpp">
 			<Option target="openGLProject"/>
 		</Unit>

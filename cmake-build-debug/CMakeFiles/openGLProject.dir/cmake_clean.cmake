@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/openGLProject.dir/ECE_UAV.cpp.obj"
   "CMakeFiles/openGLProject.dir/common/controls.cpp.obj"
   "CMakeFiles/openGLProject.dir/common/objloader.cpp.obj"
   "CMakeFiles/openGLProject.dir/common/shader.cpp.obj"

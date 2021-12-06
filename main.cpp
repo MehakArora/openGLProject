@@ -25,12 +25,7 @@ using namespace glm;
 #include <common/objloader.hpp>
 #include <common/vboindexer.hpp>
 #include "common/renderscene.h"
-
-#define PI 3.14159265
-
-const double normalX = (22.8/23.5);
-const double normalY = (24.4/22.4);
-const double normaldist = 100;
+#include "ECE_UAV.h"
 
 glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 200.0f);
 // Camera matrix
@@ -40,339 +35,6 @@ glm::mat4 ViewMatrixf       = glm::lookAt(
         glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 );
 
-double distance(glm::vec3 p1, glm::vec3 p2)
-{
-    glm::vec3 d;
-    d.x = std::abs(p1.x - p2.x);
-    d.y = std::abs(p1.y - p2.y);
-    d.z = std::abs(p1.z - p2.z);
-
-    double dist = std::sqrt(std::pow(d.x, 2) + std::pow(d.y, 2) + std::pow(d.z, 2));
-
-    return dist;
-}
-
-glm::vec3 subtract(glm::vec3 p1, glm::vec3 p2)
-{
-    glm::vec3 d;
-    d.x = p1.x - p2.x;
-    d.y = p1.y - p2.y;
-    d.z = p1.z - p2.z;
-    return d;
-}
-
-class ECE_UAV
-{
-private:
-
-    glm::vec3 position;
-    glm::vec3 velocity;
-    glm::vec3 acceleration;
-    glm::vec3 directionVector; //points from uav to target
-    glm::vec3 tangentVector; //a normal vector to the current direction vector
-    int pos;
-    double mass;
-    bool circularMotion;
-    double circularStart;
-
-
-    void updateVectors()
-    {
-        glm::vec3 posSuzie = this->position;
-        glm::vec3 target = glm::vec3(0,0,50);
-        glm::vec3 directionVector = subtract(target, posSuzie);
-        double distFromTarget = distance(target, posSuzie);
-        directionVector.x = directionVector.x / distFromTarget;
-        directionVector.y = directionVector.y / distFromTarget;
-        directionVector.z = directionVector.z / distFromTarget;
-
-        this->directionVector = directionVector;
-
-
-        std::srand(time(0)*this->pos);
-        glm::vec3 v = glm::vec3(std::rand() % 11, std::rand() % 11 , std::rand() % 11 );
-        glm::vec3 vv = subtract(v, posSuzie);
-        double distFromV = distance(v, posSuzie);
-
-        vv.x /= distFromV;
-        vv.y /= distFromV;
-        vv.z /= distFromV;
-
-        glm::vec3 tangentVector;
-        tangentVector.x = vv.y * directionVector.z - vv.z * directionVector.y;
-        tangentVector.y = vv.z * directionVector.x - vv.x * directionVector.z;
-        tangentVector.z = vv.x * directionVector.y - vv.y * directionVector.x;
-
-        if (tangentVector.x == 0.0 && tangentVector.y == 0.0 && tangentVector.z == 0.0)
-        {
-            vv.x = vv.x + 1;
-            tangentVector.x = vv.y * directionVector.z - vv.z * directionVector.y;
-            tangentVector.y = vv.z * directionVector.x - vv.x * directionVector.z;
-            tangentVector.z = vv.x * directionVector.y - vv.y * directionVector.x;
-        }
-
-        double tMag = distance(tangentVector, glm::vec3 (0.0f, 0.0f, 0.0f));
-        this->tangentVector.x = tangentVector.x/tMag;
-        this->tangentVector.y = tangentVector.y/tMag;
-        this->tangentVector.z = tangentVector.z/tMag;
-    }
-
-public:
-
-    ECE_UAV ()
-    {
-        position = glm::vec3 (0.0f,0.0f,0.0f);
-        velocity = glm::vec3 (0.0f,0.0f,0.0f);
-        directionVector = glm::vec3 (0.0f,0.0f,0.0f);
-        tangentVector = glm::vec3 (0.0f,0.0f,0.0f);
-        mass = 1;
-        acceleration = glm::vec3 (0.0f,0.0f,0.0f);
-        pos = -1;
-        circularMotion = false;
-    }
-
-    glm::vec3 getPosition()
-    {
-        return this->position;
-    }
-
-    glm::vec3 getVelocity()
-    {
-        return this->velocity;
-    }
-
-    void setPosition(glm::vec3 pos)
-    {
-        this->position = pos;
-    }
-
-    void setVelocity(glm::vec3 vel)
-    {
-        this->velocity = vel;
-    }
-
-    void initPos(int i)
-    {
-        glm::vec3 posSuzie;
-        if(i < 5)
-        {
-            posSuzie = glm::vec3(45.72f - i*23.5f, 24.4f, 0.0f);
-        }
-        else if( i < 10)
-        {
-            posSuzie = glm::vec3(45.72f - (i-5)*23.5f, -24.4f, 0.0f);
-        }
-        else
-        {
-            posSuzie = glm::vec3(45.72f - (i-10)*23.5f, 0.0f, 0.0f);
-        }
-
-        this->position = posSuzie;
-        this->pos = i;
-
-        updateVectors();
-    }
-
-
-    void updatePosition(double delta, double distanceThreshold, double currentTime)
-    {
-
-
-        glm::vec3 curPos = this->position;
-        glm::vec3 target = glm::vec3(0,0,50);
-        double distFromTarget = distance(target, curPos);
-        //curPos.x *= normalX;
-        //curPos.y *= normalY;
-
-        double fMax = 20.0;
-        double k = 20;
-        glm::vec3  force;
-        glm::vec3 newVel;
-        glm::vec3 newPos;
-
-        if( distFromTarget >= distanceThreshold and not circularMotion)
-        {
-
-            double vMax = 2.0;
-
-            double phi = std::atan2(std::sqrt(std::pow(directionVector.x, 2) + std::pow(directionVector.y, 2)), directionVector.z);
-            //Let angle between x and y component be theta and angle between z and xy direction vector be phi
-            force.x = this->directionVector.x * (fMax - 10/cos(phi) );//20 * std::sin(phi * PI / 180) * std::cos(theta * PI / 180);
-            force.y = this->directionVector.y * (fMax - 10/cos(phi) );//20 * std::sin(phi * PI / 180) * std::sin(theta * PI / 180);
-            force.z = this->directionVector.z * (fMax - 10/cos(phi) ) ;//20 * std::cos(phi * PI / 180) - 10;
-
-            //Get acceleration from force vector
-            this->acceleration.x = force.x / this->mass;
-            this->acceleration.y = force.y / this->mass;
-            this->acceleration.z = force.z / this->mass;
-
-            //Get New Velocity
-            newVel = glm::vec3(this->velocity.x + this->acceleration.x * delta ,
-                                         this->velocity.y + this->acceleration.y * delta ,
-                                         this->velocity.z + this->acceleration.z * delta );
-
-            double vMag = distance(newVel, glm::vec3(0.0f, 0.0f, 0.0f));
-
-            if( vMag > vMax)
-            {
-
-                newVel.x = (newVel.x/vMag)*2;
-                newVel.y = (newVel.y/vMag)*2;
-                newVel.z = (newVel.z/vMag)*2;
-
-                this->acceleration = subtract(newVel, this->velocity);
-                this->acceleration.x /= delta;
-                this->acceleration.y /= delta;
-                this->acceleration.z /= delta;
-            }
-            newPos = glm::vec3 (((curPos.x /normalX) + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta)*normalX ,
-                                ((curPos.y /normalY) + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta)*normalY ,
-                                ((curPos.z ) + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta) );
-        }
-        else
-        {
-            if(not circularMotion)
-            {
-                circularMotion = true;
-                circularStart = currentTime;
-                updateVectors();
-                this->velocity.x = 10*this->tangentVector.x;
-                this->velocity.y = 10*this->tangentVector.y;
-                this->velocity.z = 10*this->tangentVector.z;
-
-            }
-
-            glm::vec3 posSuzie = this->position;
-            glm::vec3 target = glm::vec3(0,0,50);
-            glm::vec3 directionVector = subtract(target, posSuzie);
-            double distFromTarget = distance(target, posSuzie);
-            directionVector.x = -1*directionVector.x / distFromTarget;
-            directionVector.y = -1*directionVector.y / distFromTarget;
-            directionVector.z = -1*directionVector.z / distFromTarget;
-
-            this->directionVector = directionVector;
-
-            double vMax = 10.0;
-            double fSpring = k * (10 - distFromTarget);
-
-            //Get acceleration from force vector
-            this->acceleration.x = fSpring * this->directionVector.x /this->mass;
-            this->acceleration.y = fSpring * this->directionVector.y /this->mass;
-            this->acceleration.z = fSpring * this->directionVector.z /this->mass;
-
-            //Get New Velocity
-            newVel = glm::vec3(this->velocity.x + this->acceleration.x * delta,
-                                         this->velocity.y + this->acceleration.y * delta,
-                                         this->velocity.z + this->acceleration.z * delta);
-
-            double vMag = distance(newVel, glm::vec3(0.0f, 0.0f, 0.0f));
-
-            this->tangentVector.x = this->velocity.x;
-            this->tangentVector.x = this->velocity.x;
-            this->tangentVector.x = this->velocity.x;
-
-            if( vMag > vMax)
-            {
-
-                newVel.x = (newVel.x/vMag)*10;
-                newVel.y = (newVel.y/vMag)*10;
-                newVel.z = (newVel.z/vMag)*10;
-
-                this->acceleration = subtract(newVel, this->velocity);
-                this->acceleration.x /= delta;
-                this->acceleration.y /= delta;
-                this->acceleration.z /= delta;
-            }
-
-            newPos = glm::vec3 (((curPos.x /normalX) + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta)*normalX ,
-                                ((curPos.y /normalY) + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta)*normalY ,
-                                ((curPos.z ) + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta) );
-
-        }
-
-        this->velocity = newVel;
-        this->position.x = newPos.x ;
-        this->position.y = newPos.y ;
-        this->position.z = newPos.z;
-
-    }
-
-    bool flySixty(double time)
-    {
-        if(circularMotion && (time - circularStart) >= 60)
-            return true;
-        else
-            return false;
-    }
-
-};
-
-void doIfCollide(ECE_UAV object1, ECE_UAV object2)
-{
-    glm::vec3 vel = object1.getVelocity();
-    object1.setVelocity(object2.getVelocity());
-    object2.setVelocity(vel);
-
-    glm::vec3 pos1 = object1.getPosition();
-    glm::vec3 pos2 = object2.getPosition();
-    double dist = distance(pos1, pos2);
-    glm::vec3 direction = subtract(pos1, pos2);
-
-    glm::vec3 newPos1 = glm::vec3(pos1.x + direction.x , pos1.y + direction.y , pos1.z + direction.z);
-    glm::vec3 newPos2 = glm::vec3(pos2.x - direction.x , pos2.y - direction.y , pos2.z - direction.z);
-
-    object1.setPosition(newPos1);
-    object2.setPosition(newPos2);
-}
-
-
-int elasticCollision(ECE_UAV *uavs, int num)
-{
-
-    glm::vec3 pos = uavs[num].getPosition();
-    pos.x = pos.x / normalX;
-    pos.y = pos.y / normalY;
-
-    // then we find the cloeset uav, default is -1, meaning that closest uav is farther than threshold
-    int closestUav = -1;
-
-    // set default dist to infinity
-    double dist = std::numeric_limits<double>::max();
-
-    // use a for loop to traverse all uavs
-    for (int i = 0; i < 15; i++)
-    {
-        if (i == num)
-        {
-            // skip itself
-            continue;
-        }
-
-        // calculate distance
-        glm::vec3 pos2 = uavs[i].getPosition();
-        pos2.x = pos2.x / normalX;
-        pos2.y = pos2.y / normalY;
-        double tmpDist = distance(pos2, pos);
-        if (tmpDist <= dist)
-        {
-            // if closer than the distance ever found so far and closer than the threshold
-            // update the closest uav
-            closestUav = i;
-            dist = tmpDist;
-        }
-    }
-
-    //std::cout<<"Distance : "<<dist<<std::endl;
-
-    if (dist <= 0.01*normaldist)
-    {
-        return closestUav;
-    }
-    else
-    {
-        return -1;
-    }
-}
 
 
 int main( void )
@@ -623,47 +285,28 @@ int main( void )
             printf("Start Flying");
             startFlying = true;
             updateTime = currentTime;
+
+            for (int i =0; i<15; i++)
+            {
+                uavs[i].setFlight();
+            }
         }
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        // Compute the MVP matrix from keyboard and mouse input
-        //computeMatricesFromInputs();
-        //glm::mat4 ProjectionMatrix = getProjectionMatrix();
-        //glm::mat4 ViewMatrix = getViewMatrix();
-        /*
-        if(startFlying)
-        {
-            for (int i = 0; i<15; i++)
-            {
-                glm::vec3 curPos = suziePos[i];
-                suziePos[i].z = curPos.z + 1;
-            }
-
-        }
-        */
-
         if(currentTime - pollTime >= 0.03)
         {
             pollTime = currentTime;
-
+            bool check = true;
             for (int i =0 ; i<15; i++)
             {
-                int collision;
                 suziePos[i] = uavs[i].getPosition();
-                collision = elasticCollision(uavs, i);
-                if(collision == -1)
-                {
-                    continue;
-                }
-                else
-                {
-                    doIfCollide(uavs[i], uavs[collision]);
-                    std::cout<<i<< " collides with " <<collision<<std::endl;
-                }
+                check = check && uavs[i].flySixty(currentTime);
             }
+
+            if(check)
+                allDone = true;
 
         }
 
@@ -671,7 +314,6 @@ int main( void )
         if(currentTime - updateTime >= 0.01 and startFlying)
         {
             updateTime = currentTime;
-            bool check = true;
             for (int i =0 ; i<15; i++)
             {
 
@@ -680,14 +322,13 @@ int main( void )
                 if(collision != -1)
                 {
                     doIfCollide(uavs[i], uavs[collision]);
-                    std::cout<<i<< " collides with " <<collision<<std::endl;
+                    std::cout<<i<< " collides with " <<collision<< " : "<< uavs[i].getPosition().x << " " << uavs[i].getPosition().y << " " << uavs[i].getPosition().z << std::endl;
                 }
+
                 uavs[i].updatePosition(0.01, 10.0, currentTime);
-                check = check && uavs[i].flySixty(currentTime);
+
             }
 
-            if(check)
-                allDone = true;
         }
 
         renderFootballField(ViewMatrixf, ProjectionMatrixf,
@@ -707,7 +348,7 @@ int main( void )
             renderASuzie(suziePos[i], ViewMatrixf, ProjectionMatrixf,
                          programIDSuzie, LightIDSuzie, ViewMatrixIDSuzie, MatrixIDSuzie, ModelMatrixIDSuzie,
                          textureSuzie, TextureIDSuzie, vertexbufferSuzie, normalbufferSuzie,
-                         uvbufferSuzie, elementbufferSuzie, indicesSuzie, colorIDSuzie, std::abs(std::cos(3*currentTime))/2 + 0.7 );
+                         uvbufferSuzie, elementbufferSuzie, indicesSuzie, colorIDSuzie, (std::abs(std::cos(6*(currentTime)))/2 +0.3) *2 );
         }
 
         // Swap buffers
