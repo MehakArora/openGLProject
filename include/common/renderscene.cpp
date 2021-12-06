@@ -46,7 +46,7 @@ void renderFootballField(const glm::mat4 &ViewMatrixf,
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP1[0][0]);
     glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix1[0][0]);
 
-
+;
     // Bind our texture in Texture Unit 0
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, Texture);
@@ -105,19 +105,24 @@ void renderFootballField(const glm::mat4 &ViewMatrixf,
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
 
+
 }
 
 void renderASuzie(glm::vec3 pos, const glm::mat4 &ViewMatrixf, const glm::mat4 &ProjectionMatrixf,
                   const GLuint &programID, const GLuint &LightID, const GLuint &ViewMatrixID,
                   const GLuint &MatrixID, const GLuint &ModelMatrixID, const GLuint &Texture,
                   const GLuint &TextureID, const GLuint &vertexbuffer, const GLuint &normalbuffer,
-                  const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices, int color)
+                  const GLuint &uvbuffer, const GLuint &elementbuffer, std::vector<unsigned short> indices, const GLuint colorID, double color)
 {
 
     // Use our shader
     glUseProgram(programID);
 
-    glm::vec3 lightPos = glm::vec3(0, 0, 31 + color);
+    glm::vec3 colorVec = glm::vec3(color, color, color);
+    glUniform3f(colorID, colorVec.x, colorVec.y, colorVec.z);
+
+
+    glm::vec3 lightPos = glm::vec3(0, 0, 31);
     glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
     glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE,
                        &ViewMatrixf[0][0]); // This one doesn't change between objects, so this can be done once for all objects that use "programID"

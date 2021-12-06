@@ -30,6 +30,7 @@ using namespace glm;
 
 const double normalX = (22.8/23.5);
 const double normalY = (24.4/22.4);
+const double normaldist = 100;
 
 glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 200.0f);
 // Camera matrix
@@ -135,6 +136,21 @@ public:
         return this->position;
     }
 
+    glm::vec3 getVelocity()
+    {
+        return this->velocity;
+    }
+
+    void setPosition(glm::vec3 pos)
+    {
+        this->position = pos;
+    }
+
+    void setVelocity(glm::vec3 vel)
+    {
+        this->velocity = vel;
+    }
+
     void initPos(int i)
     {
         glm::vec3 posSuzie;
@@ -169,7 +185,7 @@ public:
         //curPos.y *= normalY;
 
         double fMax = 20.0;
-        double k = 10;
+        double k = 20;
         glm::vec3  force;
         glm::vec3 newVel;
         glm::vec3 newPos;
@@ -209,9 +225,9 @@ public:
                 this->acceleration.y /= delta;
                 this->acceleration.z /= delta;
             }
-            newPos = glm::vec3 (curPos.x + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta ,
-                                          curPos.y + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta ,
-                                          curPos.z + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta );
+            newPos = glm::vec3 (((curPos.x /normalX) + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta)*normalX ,
+                                ((curPos.y /normalY) + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta)*normalY ,
+                                ((curPos.z ) + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta) );
         }
         else
         {
@@ -235,8 +251,6 @@ public:
             directionVector.z = -1*directionVector.z / distFromTarget;
 
             this->directionVector = directionVector;
-
-            std::cout<<this->velocity.x*this->directionVector.x + this->velocity.y*this->directionVector.y + this->velocity.z*this->directionVector.z <<std::endl;
 
             double vMax = 10.0;
             double fSpring = k * (10 - distFromTarget);
@@ -270,9 +284,9 @@ public:
                 this->acceleration.z /= delta;
             }
 
-            newPos = glm::vec3 (curPos.x + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta ,
-                                curPos.y + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta ,
-                                curPos.z + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta );
+            newPos = glm::vec3 (((curPos.x /normalX) + this->velocity.x*delta + 0.5*this->acceleration.x*delta * delta)*normalX ,
+                                ((curPos.y /normalY) + this->velocity.y*delta + 0.5*this->acceleration.y*delta * delta)*normalY ,
+                                ((curPos.z ) + this->velocity.z*delta + 0.5*this->acceleration.z*delta * delta) );
 
         }
 
@@ -282,17 +296,7 @@ public:
         this->position.z = newPos.z;
 
     }
-/*
-    glm::vec3 updatePosition(glm::vec3 curPos, glm::vec3 curVel, glm::vec3 force, double delta)
-    {
-        glm::vec3 newPos = glm::vec3 (curPos.x + curVel.x*delta + 0.5*force.x*delta * delta ,
-                                      curPos.y + curVel.y*delta + 0.5*force.y*delta * delta ,
-                                      curPos.z + curVel.z*delta + 0.5*force.z*delta * delta );
-        //std::cout<< newPos.x << " " << newPos.y << " " << newPos.z << " " << distance(newPos, glm::vec3(0.0f, 0.0f, 50.0f)) << std::endl;
 
-        return newPos;
-    }
-*/
     bool flySixty(double time)
     {
         if(circularMotion && (time - circularStart) >= 60)
@@ -303,7 +307,72 @@ public:
 
 };
 
+void doIfCollide(ECE_UAV object1, ECE_UAV object2)
+{
+    glm::vec3 vel = object1.getVelocity();
+    object1.setVelocity(object2.getVelocity());
+    object2.setVelocity(vel);
 
+    glm::vec3 pos1 = object1.getPosition();
+    glm::vec3 pos2 = object2.getPosition();
+    double dist = distance(pos1, pos2);
+    glm::vec3 direction = subtract(pos1, pos2);
+
+    glm::vec3 newPos1 = glm::vec3(pos1.x + direction.x , pos1.y + direction.y , pos1.z + direction.z);
+    glm::vec3 newPos2 = glm::vec3(pos2.x - direction.x , pos2.y - direction.y , pos2.z - direction.z);
+
+    object1.setPosition(newPos1);
+    object2.setPosition(newPos2);
+}
+
+
+int elasticCollision(ECE_UAV *uavs, int num)
+{
+
+    glm::vec3 pos = uavs[num].getPosition();
+    pos.x = pos.x / normalX;
+    pos.y = pos.y / normalY;
+
+    // then we find the cloeset uav, default is -1, meaning that closest uav is farther than threshold
+    int closestUav = -1;
+
+    // set default dist to infinity
+    double dist = std::numeric_limits<double>::max();
+
+    // use a for loop to traverse all uavs
+    for (int i = 0; i < 15; i++)
+    {
+        if (i == num)
+        {
+            // skip itself
+            continue;
+        }
+
+        // calculate distance
+        glm::vec3 pos2 = uavs[i].getPosition();
+        pos2.x = pos2.x / normalX;
+        pos2.y = pos2.y / normalY;
+        double tmpDist = distance(pos2, pos);
+        if (tmpDist <= dist)
+        {
+            // if closer than the distance ever found so far and closer than the threshold
+            // update the closest uav
+            closestUav = i;
+            dist = tmpDist;
+        }
+    }
+
+    //std::cout<<"Distance : "<<dist<<std::endl;
+
+    if (dist <= 0.01*normaldist)
+    {
+        return closestUav;
+    }
+    else
+    {
+        return -1;
+    }
+}
 
 
 int main( void )
@@ -357,6 +426,7 @@ int main( void )
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+    glEnable(GL_COLOR_MATERIAL);
 
     // Cull triangles which normal is not towards the camera
     glEnable(GL_CULL_FACE);
@@ -365,6 +435,7 @@ int main( void )
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
+    //// Football Field ////
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders( "StandardShading.vertexshader", "StandardShading.fragmentshader" );
 
@@ -375,12 +446,9 @@ int main( void )
 
     // Load the textures
     GLuint Texture = loadBMP_custom("footballfield.bmp");
-    GLuint textureSuzie = loadDDS("uvmap.DDS");
 
     // Get a handle for our "myTextureSampler" uniform
     GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
-
-    //// Football Field ////
 
     // Read our .obj file
     std::vector<glm::vec3> vertices;
@@ -415,8 +483,23 @@ int main( void )
     glGenBuffers(1, &elementbuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+    glUseProgram(programID);
+    GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
 
     ////Suzie ////
+
+    GLuint programIDSuzie = LoadShaders( "StandardShading.vertexshader", "uavShading.fragmentshader" );
+
+    // Get a handle for our "MVP" uniform
+    GLuint MatrixIDSuzie = glGetUniformLocation(programIDSuzie, "MVP");
+    GLuint ViewMatrixIDSuzie = glGetUniformLocation(programIDSuzie, "V");
+    GLuint ModelMatrixIDSuzie = glGetUniformLocation(programIDSuzie, "M");
+
+    // Load the textures
+    GLuint textureSuzie = loadDDS("uvmap.DDS");
+
+    // Get a handle for our "myTextureSampler" uniform
+    GLuint TextureIDSuzie  = glGetUniformLocation(programIDSuzie, "myTextureSampler");
 
     // Read our .obj file
     std::vector<glm::vec3> verticesSuzie;
@@ -453,8 +536,11 @@ int main( void )
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSuzie.size() * sizeof(unsigned short), &indicesSuzie[0] , GL_STATIC_DRAW);
 
     // Get a handle for our "LightPosition" uniform
-    glUseProgram(programID);
-    GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+    glUseProgram(programIDSuzie);
+    GLuint LightIDSuzie = glGetUniformLocation(programIDSuzie, "LightPosition_worldspace");
+
+    glUseProgram(programIDSuzie);
+    GLuint colorIDSuzie = glGetUniformLocation(programIDSuzie, "AmbientColor");
 
     //// Sphere ////
 
@@ -511,6 +597,7 @@ int main( void )
     int nbFrames = 0;
     bool startFlying = false;
     bool allDone = false;
+    double color = 1;
 
     //Initialize Suzie Positions
     ECE_UAV *uavs = new ECE_UAV[15];
@@ -564,7 +651,18 @@ int main( void )
 
             for (int i =0 ; i<15; i++)
             {
+                int collision;
                 suziePos[i] = uavs[i].getPosition();
+                collision = elasticCollision(uavs, i);
+                if(collision == -1)
+                {
+                    continue;
+                }
+                else
+                {
+                    doIfCollide(uavs[i], uavs[collision]);
+                    std::cout<<i<< " collides with " <<collision<<std::endl;
+                }
             }
 
         }
@@ -576,13 +674,20 @@ int main( void )
             bool check = true;
             for (int i =0 ; i<15; i++)
             {
+
+                int collision;
+                collision = elasticCollision(uavs, i);
+                if(collision != -1)
+                {
+                    doIfCollide(uavs[i], uavs[collision]);
+                    std::cout<<i<< " collides with " <<collision<<std::endl;
+                }
                 uavs[i].updatePosition(0.01, 10.0, currentTime);
                 check = check && uavs[i].flySixty(currentTime);
             }
 
             if(check)
                 allDone = true;
-
         }
 
         renderFootballField(ViewMatrixf, ProjectionMatrixf,
@@ -599,17 +704,10 @@ int main( void )
 
         for (int i =0 ; i<15; i++)
         {
-            int color;
-            if(i <5 ){
-                color = 5000;
-            }
-            else{
-                color = 0;
-            }
             renderASuzie(suziePos[i], ViewMatrixf, ProjectionMatrixf,
-                         programID, LightID, ViewMatrixID, MatrixID, ModelMatrixID,
-                         textureSuzie, TextureID, vertexbufferSuzie, normalbufferSuzie,
-                         uvbufferSuzie, elementbufferSuzie, indicesSuzie, color);
+                         programIDSuzie, LightIDSuzie, ViewMatrixIDSuzie, MatrixIDSuzie, ModelMatrixIDSuzie,
+                         textureSuzie, TextureIDSuzie, vertexbufferSuzie, normalbufferSuzie,
+                         uvbufferSuzie, elementbufferSuzie, indicesSuzie, colorIDSuzie, std::abs(std::cos(3*currentTime))/2 + 0.7 );
         }
 
         // Swap buffers
@@ -638,6 +736,7 @@ int main( void )
     glDeleteProgram(programIDSphere);
 
     glDeleteProgram(programID);
+    glDeleteProgram(programIDSuzie);
     glDeleteTextures(1, &Texture);
     glDeleteTextures(1, &textureSuzie);
     glDeleteVertexArrays(1, &VertexArrayID);

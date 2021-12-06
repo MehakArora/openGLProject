@@ -34,7 +34,8 @@ void renderASuzie(glm::vec3 pos,
                   const GLuint &normalbuffer,
                   const GLuint &uvbuffer,
                   const GLuint &elementbuffer,
-                  std::vector<unsigned short> indices, int color);
+                  std::vector<unsigned short> indices,
+                  const GLuint colorID, double color);
 
 
 void renderFootballField( const glm::mat4 &ViewMatrixf,
