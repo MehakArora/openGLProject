@@ -259,6 +259,7 @@ int main( void )
     int nbFrames = 0;
     bool startFlying = false;
     bool allDone = false;
+    bool circularStart[15];
     double color = 1;
 
     //Initialize Suzie Positions
@@ -268,6 +269,7 @@ int main( void )
     for (int i = 0; i<15; i++)
     {
         uavs[i].initPos(i);
+        circularStart[i] = false;
         suziePos.push_back(uavs[i].getPosition());
     }
 
@@ -302,7 +304,19 @@ int main( void )
             for (int i =0 ; i<15; i++)
             {
                 suziePos[i] = uavs[i].getPosition();
+
+                if(not circularStart[i])
+                {
+                    circularStart[i] = uavs[i].getCircularStart();
+                    if(circularStart[i])
+                    {
+                        uavs[i].setCircularTime(currentTime);
+                    }
+                }
+
                 check = check && uavs[i].flySixty(currentTime);
+
+
             }
 
             if(check)
@@ -325,7 +339,7 @@ int main( void )
                     std::cout<<i<< " collides with " <<collision<< " : "<< uavs[i].getPosition().x << " " << uavs[i].getPosition().y << " " << uavs[i].getPosition().z << std::endl;
                 }
 
-                uavs[i].updatePosition(0.01, 10.0, currentTime);
+                uavs[i].updatePosition(0.01, 10.0);
 
             }
 

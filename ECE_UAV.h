@@ -56,7 +56,7 @@ public:
     void initPos(int i);
 
     //Update position vector to simulate the motion of uavs
-    void updatePosition(double delta, double distanceThreshold, double currentTime);
+    void updatePosition(double delta, double distanceThreshold);
 
     //Checks if the uav has been in circular motion for 60 seconds
     bool flySixty(double time);

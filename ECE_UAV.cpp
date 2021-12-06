@@ -173,7 +173,7 @@ void ECE_UAV::updateVectors()
 }
 
 
-void ECE_UAV::updatePosition(double delta, double distanceThreshold, double currentTime)
+void ECE_UAV::updatePosition(double delta, double distanceThreshold)
 {
 
     /// Function that updates positions of uavs while moving
@@ -236,7 +236,6 @@ void ECE_UAV::updatePosition(double delta, double distanceThreshold, double curr
         {
             if (not circularMotion) {
                 circularMotion = true;
-                circularStart = currentTime;
                 updateVectors();
                 this->velocity.x = 10 * this->tangentVector.x;
                 this->velocity.y = 10 * this->tangentVector.y;
