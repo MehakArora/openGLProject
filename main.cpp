@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
-#include<ctime>
+#include <thread>
 
 
 // Include GLEW
@@ -27,10 +27,11 @@ using namespace glm;
 #include "common/renderscene.h"
 #include "ECE_UAV.h"
 
-glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 200.0f);
+
+glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(80.0f), 3072.0f / 1920.0f, 0.1f, 200.0f);
 // Camera matrix
 glm::mat4 ViewMatrixf       = glm::lookAt(
-        glm::vec3(0,130,80), // Camera is at (4,3,3), in World Space
+        glm::vec3(0,130,50), // Camera is at (4,3,3), in World Space
         glm::vec3(0,0,0), // and looks at the origin
         glm::vec3(0,-1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 );
@@ -54,7 +55,7 @@ int main( void )
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( 1920, 1080, "Final Project", NULL, NULL);
+    window = glfwCreateWindow( 3072, 1920, "Final Project", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -79,7 +80,7 @@ int main( void )
 
     // Set the mouse at the center of the screen
     glfwPollEvents();
-    //glfwSetCursorPos(window, 1024/2, 768/2);
+    //glfwSetCursorPos(window, 1920/2, 1080/2);
 
     // Black background
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -249,7 +250,7 @@ int main( void )
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSphere.size() * sizeof(unsigned short), &indicesSphere[0] , GL_STATIC_DRAW);
 
     //z is 60 here because we want the center of the sphere to be at the target point (0,0,50) but this object renders with the top of the sphere as origin
-    glm::vec3 posSphere = glm::vec3(0.0f, 0.0f, 50.0f);
+    glm::vec3 posSphere = glm::vec3(1.0f, 0.0f, 48.0f);
 
     // For speed computation
     double lastTime = glfwGetTime();
@@ -265,12 +266,19 @@ int main( void )
     //Initialize Suzie Positions
     ECE_UAV *uavs = new ECE_UAV[15];
     std::vector<glm::vec3> suziePos;
+    auto numThread = std::thread::hardware_concurrency();
 
     for (int i = 0; i<15; i++)
     {
         uavs[i].initPos(i);
         circularStart[i] = false;
         suziePos.push_back(uavs[i].getPosition());
+        uavs[i].start();
+    }
+
+    for (int i = 0; i<15; i++)
+    {
+        uavs[i].printt();
     }
 
 
@@ -291,6 +299,8 @@ int main( void )
             for (int i =0; i<15; i++)
             {
                 uavs[i].setFlight();
+                //uavs[i].start();
+                //uavs[i].printt();
             }
         }
 
@@ -303,6 +313,14 @@ int main( void )
             bool check = true;
             for (int i =0 ; i<15; i++)
             {
+                int collision;
+                collision = elasticCollision(uavs, i);
+                if(collision != -1)
+                {
+                    doIfCollide(uavs[i], uavs[collision]);
+                    std::cout<<i<< " collides with " <<collision<< " : "<< uavs[i].getPosition().x << " " << uavs[i].getPosition().y << " " << uavs[i].getPosition().z << std::endl;
+                }
+
                 suziePos[i] = uavs[i].getPosition();
 
                 if(not circularStart[i])
@@ -320,31 +338,37 @@ int main( void )
             }
 
             if(check)
+            {
                 allDone = true;
+                for (int i = 0; i<15; i++)
+                {
+                    uavs[i].setAllDone();
+                }
+            }
+
 
         }
-
-
+/*
         if(currentTime - updateTime >= 0.01 and startFlying)
         {
             updateTime = currentTime;
             for (int i =0 ; i<15; i++)
             {
 
-                int collision;
-                collision = elasticCollision(uavs, i);
-                if(collision != -1)
-                {
-                    doIfCollide(uavs[i], uavs[collision]);
-                    std::cout<<i<< " collides with " <<collision<< " : "<< uavs[i].getPosition().x << " " << uavs[i].getPosition().y << " " << uavs[i].getPosition().z << std::endl;
-                }
-
                 uavs[i].updatePosition(0.01, 10.0);
 
             }
 
         }
-
+*/
+/*
+        computeMatricesFromInputs();
+        glm::mat4 ProjectionMatrixf = getProjectionMatrix();
+        //glm::mat4 ProjectionMatrixf = glm::perspective(glm::radians(45.0f), (float) 1920 / (float)1080, 0.1f, 100.0f);
+        glm::mat4 ViewMatrixf = getViewMatrix();
+        //glm::mat4 ViewMatrixf = glm::translate(ViewMatrix, glm::vec3(0.0f, 130.0f ,-10.0f));
+        //ViewMatrixf = glm::rotate(ViewMatrixf, 90.0f, glm::vec3(0,-1,0));
+*/
         renderFootballField(ViewMatrixf, ProjectionMatrixf,
                             programID, LightID, ViewMatrixID,
                             MatrixID, ModelMatrixID, Texture, TextureID,

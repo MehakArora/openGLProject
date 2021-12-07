@@ -18,7 +18,7 @@
 
 const double normalX = (22.8/23.5);
 const double normalY = (24.4/22.4);
-const double normaldist = 100;
+const double normaldist = 90;
 
 //Euclidean Distance between two vectors
 double distance(glm::vec3 p1, glm::vec3 p2)
@@ -43,7 +43,7 @@ glm::vec3 subtract(glm::vec3 p1, glm::vec3 p2)
     return d;
 }
 
-ECE_UAV::ECE_UAV() :thread()
+ECE_UAV::ECE_UAV():thread()
 {
     position = glm::vec3 (0.0f,0.0f,0.0f);
     velocity = glm::vec3 (0.0f,0.0f,0.0f);
@@ -54,20 +54,24 @@ ECE_UAV::ECE_UAV() :thread()
     pos = -1;
     circularMotion = false;
     startFlying = false;
+    allDone = false;
 }
 
-/*
+
 void ECE_UAV::start()
 {
     this->thread = std::thread(&threadFunction, this);
 }
 
-void threadFunction(ECE_UAV &pUAV)
+void threadFunction(ECE_UAV* pUAV)
 {
-    pUAV.updatePosition(0.01, 10,1 );
-    std::this_thread::sleep_for(std::chrono::milliseconds(30));
+    do{
+        pUAV->updatePosition(0.01, 10);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }while(not pUAV->getAllDone());
+
 }
-*/
+
 bool ECE_UAV::getCircularStart()
 {
     return this->circularMotion;
@@ -82,6 +86,16 @@ void ECE_UAV::setCircularTime(double time)
 void ECE_UAV::setFlight()
 {
     this->startFlying = true;
+}
+
+void ECE_UAV::setAllDone()
+{
+    this->allDone = true;
+}
+
+bool ECE_UAV::getAllDone()
+{
+    return this->allDone;
 }
 
 glm::vec3 ECE_UAV::getPosition()
@@ -188,11 +202,11 @@ void ECE_UAV::updatePosition(double delta, double distanceThreshold)
     glm::vec3 newVel;
     glm::vec3 newPos;
 
-    if(this->startFlying)
-    {
 
-        if (distFromTarget >= distanceThreshold and not circularMotion)
-        {
+    if(this->startFlying) {
+
+
+        if (distFromTarget >= distanceThreshold and not circularMotion) {
 
             double vMax = 2.0;
 
@@ -231,9 +245,7 @@ void ECE_UAV::updatePosition(double delta, double distanceThreshold)
                     ((curPos.y / normalY) + this->velocity.y * delta + 0.5 * this->acceleration.y * delta * delta) *
                     normalY,
                     ((curPos.z) + this->velocity.z * delta + 0.5 * this->acceleration.z * delta * delta));
-        }
-        else
-        {
+        } else {
             if (not circularMotion) {
                 circularMotion = true;
                 updateVectors();
@@ -304,11 +316,13 @@ void ECE_UAV::updatePosition(double delta, double distanceThreshold)
 
         }
 
+
         this->velocity = newVel;
         this->position.x = newPos.x;
         this->position.y = newPos.y;
         this->position.z = newPos.z;
     }
+
 }
 
 bool ECE_UAV::flySixty(double time)
@@ -334,10 +348,11 @@ void doIfCollide(ECE_UAV &object1, ECE_UAV &object2)
     glm::vec3 pos2 = object2.getPosition();
     double vmag1 = distance(vel1, glm::vec3(0,0,0));
     double vmag2 = distance(vel2, glm::vec3(0,0,0));
-    double dist = distance(pos2, pos2)*2;
+    double dist = distance(pos2, pos2)*10;
+    glm::vec3 dir = subtract(pos1, pos2);
 
-    glm::vec3 newPos1 = glm::vec3(pos1.x + (vel2.x/vmag2)*dist , pos1.y + (vel2.y/vmag2)*dist , pos1.z + (vel2.z/vmag2)*dist);
-    glm::vec3 newPos2 = glm::vec3(pos2.x + (vel1.x/vmag1)*dist , pos2.y + (vel1.y/vmag1)*dist , pos2.z + (vel1.z/vmag1)*dist);
+    glm::vec3 newPos1 = glm::vec3(pos1.x - dir.x , pos1.y - dir.y , pos1.z - dir.z);
+    glm::vec3 newPos2 = glm::vec3(pos2.x + dir.x , pos2.y + dir.x , pos2.z + dir.x);
 
 
     object1.setPosition(newPos1);

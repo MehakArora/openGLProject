@@ -1146,28 +1146,10 @@ GL/glu.h
 
 ../include/common/vboindexer.hpp
 
-C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.cpp
-iostream
--
-stdlib.h
--
-math.h
--
-ctime
--
-thread
--
-chrono
--
-glm/glm.hpp
--
-glm/gtc/matrix_transform.hpp
--
-ECE_UAV.h
-C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.h
-
 C:/Users/mehak/CLionProjects/openGLProject/ECE_UAV.h
 thread
+-
+atomic
 -
 
 C:/Users/mehak/CLionProjects/openGLProject/main.cpp
@@ -1181,7 +1163,7 @@ vector
 -
 math.h
 -
-ctime
+thread
 -
 GL/glew.h
 -
